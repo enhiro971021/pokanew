@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Poker Game</h1>
+        </header>
+        <main>
+            <section class="community-cards">
+                <h2>Community Cards</h2>
+                <div class="cards-container">
+                    <div class="card" data-card-index="0">
+                        <div class="card-inner">
+                            <div class="card-front">🂠</div>
+                            <div class="card-back">🂠</div>
+                        </div>
+                    </div>
+                    <div class="card" data-card-index="1">
+                        <div class="card-inner">
+                            <div class="card-front">🂠</div>
+                            <div class="card-back">🂠</div>
+                        </div>
+                    </div>
+                    <div class="card" data-card-index="2">
+                        <div class="card-inner">
+                            <div class="card-front">🂠</div>
+                            <div class="card-back">🂠</div>
+                        </div>
+                    </div>
+                    <div class="card" data-card-index="3">
+                        <div class="card-inner">
+                            <div class="card-front">🂠</div>
+                            <div class="card-back">🂠</div>
+                        </div>
+                    </div>
+                    <div class="card" data-card-index="4">
+                        <div class="card-inner">
+                            <div class="card-front">🂠</div>
+                            <div class="card-back">🂠</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="hole-cards-section">
+                <button class="hole-cards-btn">Hole Cards</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Card Selection Modal -->
+    <div class="modal hidden" id="cardSelectionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Select Card</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="selection-container">
+                    <div class="suit-selection">
+                        <h3>Select Suit</h3>
+                        <div class="suit-buttons">
+                            <button class="suit-btn" data-suit="♠">♠</button>
+                            <button class="suit-btn" data-suit="♥">♥</button>
+                            <button class="suit-btn" data-suit="♦">♦</button>
+                            <button class="suit-btn" data-suit="♣">♣</button>
+                        </div>
+                    </div>
+                    <div class="value-selection">
+                        <h3>Select Value</h3>
+                        <div class="value-buttons">
+                            <button class="value-btn" data-value="A">A</button>
+                            <button class="value-btn" data-value="K">K</button>
+                            <button class="value-btn" data-value="Q">Q</button>
+                            <button class="value-btn" data-value="J">J</button>
+                            <button class="value-btn" data-value="10">10</button>
+                            <button class="value-btn" data-value="9">9</button>
+                            <button class="value-btn" data-value="8">8</button>
+                            <button class="value-btn" data-value="7">7</button>
+                            <button class="value-btn" data-value="6">6</button>
+                            <button class="value-btn" data-value="5">5</button>
+                            <button class="value-btn" data-value="4">4</button>
+                            <button class="value-btn" data-value="3">3</button>
+                            <button class="value-btn" data-value="2">2</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn confirm-btn">Confirm</button>
+                <button class="btn reset-btn">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hole Cards Bottom Sheet -->
+    <div class="bottom-sheet hidden" id="holeCardsSheet">
+        <div class="bottom-sheet-content">
+            <div class="bottom-sheet-header">
+                <h2>Hole Cards</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="bottom-sheet-body">
+                <div class="cards-container">
+                    <div class="card" data-card-index="5">
+                        <div class="card-inner">
+                            <div class="card-front">🂠</div>
+                            <div class="card-back">🂠</div>
+                        </div>
+                    </div>
+                    <div class="card" data-card-index="6">
+                        <div class="card-inner">
+                            <div class="card-front">🂠</div>
+                            <div class="card-back">🂠</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="current-hand">
+                    <h3>Current Hand</h3>
+                    <div class="current-hand-content">
+                        <span class="hand-type">No Hand</span>
+                    </div>
+                </div>
+                <div class="hand-rankings">
+                    <h3>Hand Rankings</h3>
+                    <div class="rankings-container">
+                        <div class="ranking-row">
+                            <span class="hand-name">Royal Flush</span>
+                            <span class="hand-probability">0.0%</span>
+                        </div>
+                        <div class="ranking-row">
+                            <span class="hand-name">Straight Flush</span>
+                            <span class="hand-probability">0.0%</span>
+                        </div>
+                        <div class="ranking-row">
+                            <span class="hand-name">Four of a Kind</span>
+                            <span class="hand-probability">0.0%</span>
+                        </div>
+                        <div class="ranking-row">
+                            <span class="hand-name">Full House</span>
+                            <span class="hand-probability">0.0%</span>
+                        </div>
+                        <div class="ranking-row">
+                            <span class="hand-name">Flush</span>
+                            <span class="hand-probability">0.0%</span>
+                        </div>
+                        <div class="ranking-row">
+                            <span class="hand-name">Straight</span>
+                            <span class="hand-probability">0.0%</span>
+                        </div>
+                        <div class="ranking-row">
+                            <span class="hand-name">Three of a Kind</span>
+                            <span class="hand-probability">0.0%</span>
+                        </div>
+                        <div class="ranking-row">
+                            <span class="hand-name">Two Pair</span>
+                            <span class="hand-probability">0.0%</span>
+                        </div>
+                        <div class="ranking-row">
+                            <span class="hand-name">One Pair</span>
+                            <span class="hand-probability">0.0%</span>
+                        </div>
+                        <div class="ranking-row">
+                            <span class="hand-name">High Card</span>
+                            <span class="hand-probability">0.0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
