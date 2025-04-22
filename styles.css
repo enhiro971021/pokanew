@@ -86,22 +86,20 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5em;
     border: 1px solid #eee;
 }
 
 .card-front {
     background-color: white;
-    background-size: cover;
-    background-position: center;
 }
 
 .card-back {
     background-color: white;
-    background-image: url('card/z01.png');
-    background-size: cover;
-    background-position: center;
     transform: rotateY(180deg);
+    background-image: url('card/z01.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* Modal styles */

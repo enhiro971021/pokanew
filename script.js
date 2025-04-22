@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const cards = document.querySelectorAll('.card');
         cards.forEach(card => {
             card.classList.add('flipped'); // 最初は裏面を表示
+            card.setAttribute('data-suit', '');
+            card.setAttribute('data-value', '');
         });
     }
     
@@ -145,6 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.querySelector(`[data-card-index="${selectedCardIndex}"]`);
             card.classList.add('flipped');
             card.classList.remove('selected');
+            card.setAttribute('data-suit', '');
+            card.setAttribute('data-value', '');
             selectedCardIndex = null;
         }
         hideModal();
@@ -218,9 +222,70 @@ document.addEventListener('DOMContentLoaded', () => {
         return allCards;
     }
 
+    // ハンドを評価
+    function evaluateHand(cards) {
+        const values = cards.map(card => card.value);
+        const suits = cards.map(card => card.suit);
+        
+        // ペアの数をカウント
+        const valueCounts = {};
+        values.forEach(value => {
+            valueCounts[value] = (valueCounts[value] || 0) + 1;
+        });
+        
+        // 各役の判定用の変数
+        const pairs = Object.values(valueCounts).filter(count => count === 2).length;
+        const threeOfAKind = Object.values(valueCounts).some(count => count === 3);
+        const fourOfAKind = Object.values(valueCounts).some(count => count === 4);
+        
+        // フラッシュのチェック
+        const isFlush = suits.every(suit => suit === suits[0]);
+        
+        // ストレートのチェック
+        const valueOrder = {
+            'A': 14, 'K': 13, 'Q': 12, 'J': 11, '10': 10, '9': 9, '8': 8, 
+            '7': 7, '6': 6, '5': 5, '4': 4, '3': 3, '2': 2
+        };
+        
+        const numericValues = values.map(v => valueOrder[v]).sort((a, b) => a - b);
+        
+        // エースを1としても扱う（A-2-3-4-5のストレート用）
+        if (numericValues.includes(14)) {
+            numericValues.push(1);
+        }
+        
+        let isStraight = false;
+        for (let i = 0; i <= numericValues.length - 5; i++) {
+            if (numericValues[i+4] - numericValues[i] === 4) {
+                isStraight = true;
+                break;
+            }
+        }
+        
+        // 役の判定（強い順）
+        if (isFlush && isStraight) {
+            // ロイヤルフラッシュのチェック
+            if (numericValues.includes(14) && numericValues.includes(13) && 
+                numericValues.includes(12) && numericValues.includes(11) && 
+                numericValues.includes(10)) {
+                return 'Royal Flush';
+            }
+            return 'Straight Flush';
+        }
+        
+        if (fourOfAKind) return 'Four of a Kind';
+        if (threeOfAKind && pairs === 1) return 'Full House';
+        if (isFlush) return 'Flush';
+        if (isStraight) return 'Straight';
+        if (threeOfAKind) return 'Three of a Kind';
+        if (pairs === 2) return 'Two Pair';
+        if (pairs === 1) return 'One Pair';
+        return 'High Card';
+    }
+
     // 各役の確率を計算
     function calculateProbabilities(visibleCards, remainingCards) {
-        const totalCombinations = 10000; // シミュレーション回数
+        const totalCombinations = 50000; // シミュレーション回数を増やす
         const results = {
             'Royal Flush': 0,
             'Straight Flush': 0,
@@ -262,34 +327,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return newArray;
     }
 
-    // ハンドを評価
-    function evaluateHand(cards) {
-        // 簡易的な評価（実際のポーカー評価ロジックはもっと複雑）
-        const values = cards.map(card => card.value);
-        const suits = cards.map(card => card.suit);
-        
-        // ペアの数をカウント
-        const valueCounts = {};
-        values.forEach(value => {
-            valueCounts[value] = (valueCounts[value] || 0) + 1;
-        });
-        
-        const pairs = Object.values(valueCounts).filter(count => count === 2).length;
-        const threeOfAKind = Object.values(valueCounts).some(count => count === 3);
-        const fourOfAKind = Object.values(valueCounts).some(count => count === 4);
-        
-        // フラッシュのチェック
-        const isFlush = suits.every(suit => suit === suits[0]);
-        
-        if (isFlush) return 'Flush';
-        if (fourOfAKind) return 'Four of a Kind';
-        if (threeOfAKind && pairs === 1) return 'Full House';
-        if (threeOfAKind) return 'Three of a Kind';
-        if (pairs === 2) return 'Two Pair';
-        if (pairs === 1) return 'One Pair';
-        return 'High Card';
-    }
-
     // 確率表示を更新
     function updateProbabilityDisplay(probabilities) {
         Object.entries(probabilities).forEach(([hand, probability]) => {
@@ -307,11 +344,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 現在のハンドを評価して表示
     function updateCurrentHand() {
         const visibleCards = Array.from(document.querySelectorAll('.card:not(.flipped)')).map(card => {
-            const cardText = card.querySelector('.card-front').textContent;
-            return {
-                suit: cardText.slice(-1),
-                value: cardText.slice(0, -1)
-            };
+            const suit = card.getAttribute('data-suit');
+            const value = card.getAttribute('data-value');
+            return { suit, value };
         });
 
         if (visibleCards.length < 2) {
@@ -376,6 +411,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const valueCode = valueMap[value] || value;
         const imagePath = `card/${suitCode}${valueCode}.png`;
         
+        // 画像のみを使用するように設定
         cardFront.style.backgroundImage = `url('${imagePath}')`;
+        cardFront.style.backgroundSize = 'contain';
+        cardFront.style.backgroundPosition = 'center';
+        cardFront.style.backgroundRepeat = 'no-repeat';
+        cardFront.style.backgroundColor = 'white';
     }
 }); 
