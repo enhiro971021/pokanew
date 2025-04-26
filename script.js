@@ -199,7 +199,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 stack = value;
                                 break;
                             case 'bet':
-                                // 新しいbetの値を設定
                                 const oldBet = bet;
                                 bet = value;
                                 
@@ -229,6 +228,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     bet = 0;
                     updateChipsDisplay();
                 }
+            });
+        }
+
+        // Winボタンのイベントリスナー
+        const winButton = document.querySelector('.win-btn');
+        if (winButton) {
+            winButton.addEventListener('click', () => {
+                stack += pot + bet;
+                pot = 0;
+                bet = 0;
+                updateChipsDisplay();
+            });
+        }
+
+        // Loseボタンのイベントリスナー
+        const loseButton = document.querySelector('.lose-btn');
+        if (loseButton) {
+            loseButton.addEventListener('click', () => {
+                pot = 0;
+                bet = 0;
+                updateChipsDisplay();
             });
         }
     }

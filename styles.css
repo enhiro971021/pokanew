@@ -524,4 +524,39 @@ h3 {
 
 .action-btn:hover {
     background: #0056b3;
+}
+
+.result-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.win-btn, .lose-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-weight: 500;
+}
+
+.win-btn {
+    background: #28a745;
+    color: white;
+}
+
+.win-btn:hover {
+    background: #218838;
+}
+
+.lose-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.lose-btn:hover {
+    background: #c82333;
 } 
