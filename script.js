@@ -8,6 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedSuit = null;
     let selectedValue = null;
     
+    // チップ管理の状態
+    let pot = 0;
+    let stack = 1000;
+    let bet = 0;
+    
     // カードを初期化する関数
     function initializeCards() {
         const cards = document.querySelectorAll('.card');
@@ -154,8 +159,83 @@ document.addEventListener('DOMContentLoaded', () => {
         hideModal();
     });
     
+    // チップ管理の初期化
+    function initializeChips() {
+        updateChipsDisplay();
+        setupChipsEventListeners();
+    }
+    
+    // チップ表示の更新
+    function updateChipsDisplay() {
+        document.querySelector('.pot-amount').textContent = `$${pot}`;
+        document.querySelector('.stack-amount').textContent = `$${stack}`;
+        document.querySelector('.bet-amount').textContent = `$${bet}`;
+    }
+    
+    // チップ管理のイベントリスナー設定
+    function setupChipsEventListeners() {
+        const editButtons = document.querySelectorAll('.edit-btn');
+        editButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const container = e.target.closest('.pot-container, .stack-container, .bet-container');
+                if (!container) return;
+                
+                const fieldName = container.classList.contains('pot-container') ? 'pot' :
+                                container.classList.contains('stack-container') ? 'stack' : 'bet';
+                const currentValue = fieldName === 'pot' ? pot :
+                                   fieldName === 'stack' ? stack : bet;
+                
+                const newValue = prompt(`Enter new ${fieldName} value:`, currentValue);
+                if (newValue !== null) {
+                    const value = parseInt(newValue);
+                    if (!isNaN(value) && value >= 0) {
+                        switch (fieldName) {
+                            case 'pot':
+                                pot = value;
+                                break;
+                            case 'stack':
+                                stack = value;
+                                break;
+                            case 'bet':
+                                // 新しいbetの値を設定
+                                const oldBet = bet;
+                                bet = value;
+                                
+                                // betの増減分をstackから引く/足す
+                                const betDifference = bet - oldBet;
+                                stack -= betDifference;
+                                
+                                // stackが0未満にならないようにする
+                                if (stack < 0) {
+                                    stack = 0;
+                                    bet = oldBet + (stack - oldBet);
+                                }
+                                break;
+                        }
+                        updateChipsDisplay();
+                    }
+                }
+            });
+        });
+
+        // Add to Potボタンのイベントリスナー
+        const addToPotButton = document.querySelector('.action-btn');
+        if (addToPotButton) {
+            addToPotButton.addEventListener('click', () => {
+                if (bet > 0) {
+                    pot += bet;
+                    bet = 0;
+                    updateChipsDisplay();
+                }
+            });
+        }
+    }
+    
     // 初期化
     initializeCards();
+    initializeChips();
 
     // Hole Cards Bottom Sheet functionality
     const holeCardsBtn = document.querySelector('.hole-cards-btn');
