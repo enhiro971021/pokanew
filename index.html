@@ -9,26 +9,26 @@
 <body>
     <div class="container">
         <header>
-            <h1>Poker Hand Calculator</h1>
+            <h1 class="compact-title">Poker Hand Calculator</h1>
         </header>
 
         <!-- チップ管理セクション -->
         <div class="chips-section">
             <div class="chips-content">
                 <div class="stack-container">
-                    <h3>Stack</h3>
+                    <div class="label">Stack</div>
                     <div class="stack-amount">$1000</div>
                     <button class="edit-btn">Edit</button>
                 </div>
                 <div class="bet-container">
-                    <h3>Bet</h3>
+                    <div class="label">Bet</div>
                     <div class="bet-amount">$0</div>
                     <button class="edit-btn">Edit</button>
                 </div>
             </div>
             <button class="action-btn">Add to Pot</button>
             <div class="pot-container">
-                <h3>Pot</h3>
+                <div class="label">Pot</div>
                 <div class="pot-amount">$0</div>
                 <button class="edit-btn">Edit</button>
             </div>
@@ -135,6 +135,7 @@
                 <button class="close-btn">&times;</button>
             </div>
             <div class="bottom-sheet-body">
+                <button class="close-sheet-btn">&times;</button>
                 <div class="cards-container">
                     <div class="card" data-card-index="5">
                         <div class="card-inner">
@@ -150,7 +151,6 @@
                     </div>
                 </div>
                 <div class="current-hand">
-                    <h3>Current Hand</h3>
                     <div class="current-hand-content">
                         <span class="hand-type">No Hand</span>
                     </div>

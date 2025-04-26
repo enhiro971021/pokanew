@@ -261,6 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const holeCardsBtn = document.querySelector('.hole-cards-btn');
     const holeCardsSheet = document.getElementById('holeCardsSheet');
     const closeHoleCardsBtn = document.querySelector('#holeCardsSheet .close-btn');
+    const closeSheetBtn = document.querySelector('.close-sheet-btn');
 
     holeCardsBtn.addEventListener('click', () => {
         holeCardsSheet.classList.remove('hidden');
@@ -270,6 +271,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     closeHoleCardsBtn.addEventListener('click', () => {
+        holeCardsSheet.classList.remove('show');
+        setTimeout(() => {
+            holeCardsSheet.classList.add('hidden');
+        }, 300);
+    });
+
+    closeSheetBtn.addEventListener('click', () => {
         holeCardsSheet.classList.remove('show');
         setTimeout(() => {
             holeCardsSheet.classList.add('hidden');
